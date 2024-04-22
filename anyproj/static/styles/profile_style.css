@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.profile-info {
+  width: 30%;
+  margin-right: 2%;
+}
+
+.profile-info h2 {
+  margin-top: 0;
+}
+
+.profile-info p {
+  margin-bottom: 0;
+}
+
+.profile-stats {
+  width: 67%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.stat {
+  width: 30%;
+  margin-bottom: 2%;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat h3 {
+  margin-top: 0;
+}
+
+.stat p {
+  margin-bottom: 0;
+}

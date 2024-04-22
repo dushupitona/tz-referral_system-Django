@@ -1,0 +1,16 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auth code Input Form</title>
+    <link rel="stylesheet" href="{% static 'styles/auth_style.css' %}">
+  </head>
+  <body>
+    <form>
+      <label for="phone">Auth code:</label>
+      <input type="tel" id="phone" name="phone" required>
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Phone Number Input Form</title>
+    <link rel="stylesheet" href="{% static 'styles/login_style.css' %}">
+  </head>
+  <body>
+    <form>
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" required>
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
