@@ -30,6 +30,12 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'referral.User'
 
 
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', # This is the default that allows us to log in via username
+    'referral.backend.AuthCodeBackend'
+]   
+
 # Application definition
 
 INSTALLED_APPS = [

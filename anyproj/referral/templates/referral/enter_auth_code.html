@@ -1,0 +1,18 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Auth Code</title>
+    <link rel="stylesheet" href="{% static 'styles/login_style.css' %}">
+  </head>
+  <body>
+    <form action="{% url 'enter_auth_code' %}" method="post">
+      {% csrf_token %}
+      <label for="phone">Auth code:</label>
+      {{ form.auth_code }}
+
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>

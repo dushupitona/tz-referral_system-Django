@@ -3,13 +3,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Phone Number Input Form</title>
+    <title>Phone Number</title>
     <link rel="stylesheet" href="{% static 'styles/login_style.css' %}">
   </head>
   <body>
-    <form>
+    <form action="{% url 'enter_phone' %}" method="post">
+      {% csrf_token %}
       <label for="phone">Phone Number:</label>
-      <input type="tel" id="phone" name="phone" required>
+      {{ form.phone_number }}
+
       <button type="submit">Submit</button>
     </form>
   </body>
