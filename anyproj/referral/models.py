@@ -13,7 +13,8 @@ from datetime import datetime, timedelta
 
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=14, unique=True)
-    invite_code = models.CharField(max_length=6, blank=True)
+    referral_code = models.CharField(max_length=6, blank=True)
+    inviter = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_superuser = models.BooleanField(default=False)
 

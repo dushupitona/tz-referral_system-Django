@@ -8,20 +8,27 @@
   </head>
   <body>
     <header>
-      <h1>User Profile</h1>
+      <h2>User Profile</h2>
+      <h2><a href="{% url "logout" %}">Logout</a></h2>
     </header>
     <main>
       <div class="profile-info">
-        <a href="{% url 'logout' %}">Logout</a>
-        <h2>John Doe</h2>
-        <p>johndoe@example.com</p>
-        <p>123 Main St.</p>
-        <p>Anytown, USA</p>
+        <h2>{{ phone_number }}</h2>
       </div>
       <div class="profile-stats">
         <div class="stat">
-          <h3>Orders</h3>
-          <p>12</p>
+          {% if inviter %}
+            <h2>Инвайт код введен</h2>
+          {% else %}
+            <form action="{% url 'index' %}" method="post">
+              {% csrf_token %}
+              <label for="phone">Введите инвайт код:</label>
+              {{ form.referral_code }}
+        
+              <button type="submit">Submit</button>
+            </form>
+          {% endif %}
+          
         </div>
         
         </div>

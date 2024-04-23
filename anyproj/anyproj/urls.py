@@ -17,12 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from referral.views import EnterPhoneNumberView, EnterAuthCodeView, IndexView, logout
+from referral.views import EnterPhoneNumberView, EnterAuthCodeView, IndexView, logout_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='index'),
-    path('logout/', logout, name='logout'),
+    path('logout/', logout_view, name='logout'),
     path('auth/', EnterPhoneNumberView.as_view(), name='enter_phone'),
     path('auth/code/', EnterAuthCodeView.as_view(), name='enter_auth_code'),
 ]

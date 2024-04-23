@@ -5,10 +5,18 @@ body {
 }
 
 header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   background-color: #333;
   color: #fff;
   padding: 20px;
   text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
 }
 
 main {

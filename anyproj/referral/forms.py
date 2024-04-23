@@ -8,3 +8,7 @@ class EnterPhoneNumberForm(forms.Form):
 
 class EnterAuthCodeForm(forms.Form):
     auth_code = forms.CharField(min_length=6, max_length=6)
+
+
+class EnterReferralCodeForm(forms.Form):
+    referral_code = forms.CharField(min_length=6, max_length=6)
