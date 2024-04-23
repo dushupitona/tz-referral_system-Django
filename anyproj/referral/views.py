@@ -9,8 +9,11 @@ from referral.forms import EnterPhoneNumberForm, EnterAuthCodeForm
 
 from django.urls import reverse_lazy
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
@@ -35,11 +38,8 @@ class EnterPhoneNumberView(FormView):
             phone_user = User.objects.get(phone_number=str(phone_number))
         print(f'Phone user ID: {phone_user}')
 
-        try:
-            new_write = AuthCodeModel.objects.create(user=phone_user, code='123456')
-            new_write.save()
-        except:
-            pass
+        new_write = AuthCodeModel.objects.create(user=phone_user, code='123456')
+        new_write.save()
         self.request.session['phone_id'] = phone_user.id
         self.request.session['phone_number'] = str(phone_number)
         return super().form_valid(form) 
@@ -60,11 +60,17 @@ class EnterAuthCodeView(FormView):
 
         if user is not None:
                 login(self.request, user)
-                return reverse_lazy('index')
         else:
-            form.add_error(None, "Invalid email or password.")
+            form.add_error(None, "Invalid code or phone")
 
         print(user)
 
         return super().form_valid(form)
+    
 
+
+class MyLogoutView(LogoutView):
+    url = reverse_lazy('index')
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any):
+        logout(request)
