@@ -20,9 +20,6 @@ from rest_framework.authentication import TokenAuthentication
 from referral.tasks import send_auth_code
 
 
-
-
-
 @api_view(['POST'])
 def send_me_code(request):
     try:
@@ -49,6 +46,8 @@ def auth(request):
         auth_code = request.data['auth_code']
         user = authenticate(phone_number=phone_number, auth_code=auth_code)
         if user is not None:
+            user.is_active = True
+            user.save()
             token, created = Token.objects.get_or_create(user=user)
             return Response({'response': 'SUCCES', 'token': str(token)})
         else:
@@ -104,9 +103,5 @@ class UserProfilesAPIVIew(ListAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
     serializer_class = UsersSerializer
     queryset = User.objects.all()
-
-
-
-
 
 

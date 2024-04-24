@@ -22,7 +22,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     inviter = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     objects = UserManager()
 
@@ -38,9 +38,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 class AuthCodeModel(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     code = models.CharField(max_length=4, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_ended = models.DateTimeField(default=datetime.now() + timedelta(minutes=5))
-
+    date_created = models.DateTimeField(editable=True, auto_now_add=True)
+    date_ended = models.DateTimeField(editable=True, default=datetime.now() + timedelta(minutes=5))    
+    
     def __str__(self):
         return self.user.phone_number
 

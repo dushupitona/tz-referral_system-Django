@@ -1,16 +1,14 @@
-from django.http import HttpRequest, HttpResponse
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView
 
-from referral.models import User, AuthCodeModel
+from referral.models import User
 from referral.forms import EnterPhoneNumberForm, EnterAuthCodeForm
 
 from django.urls import reverse_lazy
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 
 from referral.forms import EnterReferralCodeForm
 
@@ -90,6 +88,8 @@ class EnterAuthCodeView(FormView):
         user = authenticate(user_id=user_id, auth_code=auth_code)
         del self.request.session['user_id']
         if user is not None:
+            user.is_active = True
+            user.save()
             login(self.request, user)
 
         return super().form_valid(form)
