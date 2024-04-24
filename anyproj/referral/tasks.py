@@ -5,7 +5,8 @@ from referral.models import AuthCodeModel
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-import os
+import random
+import time
 
 
 @app.task
@@ -16,3 +17,16 @@ def auth_code_cleaner():
             code.delete()
             print(f'Code deleted!')
    
+
+@shared_task
+def send_auth_code(user_id):
+    try:
+      time.sleep(2)
+      code = str(random.randint(1000, 9999))
+      print(code)
+      new_code = AuthCodeModel.objects.create(user_id=user_id, code=code)
+      new_code.save()
+      print(f'Code for id: {user_id} created !')
+      print(f'\n CODE: {code} \n')
+    except:
+        print(f'Code for id: {user_id} already exist !')

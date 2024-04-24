@@ -154,6 +154,6 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
     'sheduled_task': {
         'task': 'referral.tasks.auth_code_cleaner',
-        'schedule': 5,
+        'schedule': 60 * 5,
     },
 }

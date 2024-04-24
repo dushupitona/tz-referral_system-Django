@@ -5,3 +5,7 @@ db.sqlite3
 .idea/
 media/
 notes.md
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

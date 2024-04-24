@@ -7,7 +7,7 @@ class EnterPhoneNumberForm(forms.Form):
 
 
 class EnterAuthCodeForm(forms.Form):
-    auth_code = forms.CharField(min_length=6, max_length=6)
+    auth_code = forms.CharField(min_length=4, max_length=4)
 
 
 class EnterReferralCodeForm(forms.Form):

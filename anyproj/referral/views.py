@@ -14,7 +14,7 @@ from django.shortcuts import render, redirect
 
 from referral.forms import EnterReferralCodeForm
 
-from django.core.exceptions import BadRequest, ObjectDoesNotExist
+from referral.tasks import send_auth_code
 
 
 
@@ -67,11 +67,8 @@ class EnterPhoneNumberView(FormView):
         except:
             phone_user = User.objects.get(phone_number=str(phone_number))
 
-        try:
-            new_write = AuthCodeModel.objects.create(user=phone_user, code='123456')
-            new_write.save()
-        except:
-            pass
+        send_auth_code.delay(phone_user.id)
+
         self.request.session['user_id'] = phone_user.id
 
         return super().form_valid(form) 

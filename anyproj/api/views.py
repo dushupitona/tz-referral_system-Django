@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from api.serializers import UsersSerializer, UserLoginSerializer
 from rest_framework import status
-from referral.models import User, AuthCodeModel
+from referral.models import User
 from rest_framework.authtoken.models import Token
 
 from django.shortcuts import get_object_or_404
@@ -17,13 +17,10 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 
+from referral.tasks import send_auth_code
 
-def send_code(user):
-    try:
-        new_write = AuthCodeModel.objects.create(user=user, code='123456')
-        new_write.save()
-    except:
-        pass
+
+
 
 
 @api_view(['POST'])
@@ -32,14 +29,14 @@ def send_me_code(request):
         phone_number = request.data['phone_number']
         user = get_object_or_404(User, phone_number=phone_number)
         serializer = UserLoginSerializer(instance=user)
-        send_code(user)
+        send_auth_code.delay(user.id)
         return Response({'response': 'CODE SENDED','user': serializer.data})
     except:
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
             phone_number = serializer.validated_data['phone_number']
             user = User.objects.create_user(phone_number=phone_number)
-            send_code(user)
+            send_auth_code.delay(user.id)
             return Response({'response': 'CODE SENDED','user': serializer.data})
     
     return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)

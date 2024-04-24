@@ -7,7 +7,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from referral.managers import UserManager
 
-from phonenumber_field.modelfields import PhoneNumberField
 
 from datetime import datetime, timedelta
 
@@ -36,10 +35,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.is_superuser
     
 
-
 class AuthCodeModel(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    code = models.CharField(max_length=6, blank=True)
+    code = models.CharField(max_length=4, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_ended = models.DateTimeField(default=datetime.now() + timedelta(minutes=5))
 
