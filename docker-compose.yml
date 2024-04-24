@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: postgres:15-alpine
+    env_file:
+      - .env
+  
+  web:
+    depends_on:
+      - db
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./anyproj:/app
+    env_file:
+      - .env
+    command: >
+      sh -c " python manage.py makemigrations &&
+              python manage.py migrate &&
+              python manage.py loaddata /app/referral/fixtures/user.json &&
+              python manage.py runserver 0.0.0.0:8000"
