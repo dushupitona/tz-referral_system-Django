@@ -1,3 +1,4 @@
+from django.http import HttpRequest, HttpResponse
 from django.views.generic import TemplateView, FormView
 
 from referral.models import User, AuthCodeModel
@@ -12,6 +13,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 
 from referral.forms import EnterReferralCodeForm
+
+from django.core.exceptions import BadRequest, ObjectDoesNotExist
+
 
 
 # Create your views here.
@@ -35,10 +39,16 @@ class IndexView(LoginRequiredMixin, FormView):
         form_ref_code = form.cleaned_data.get('referral_code')
         try:
             form_ref_user = User.objects.get(referral_code=form_ref_code)
+            if form_ref_user == user:
+                raise ValueError
             user.inviter = form_ref_user
             user.save()
-        except:
-            form.add_error('referral_code', 'Invalid referral code')
+        except User.DoesNotExist:
+            form.add_error(None, 'Invalid referral code')
+            return super().form_invalid(form)
+        except ValueError:
+            form.add_error(None, 'You cannot use your own referral code')
+            return super().form_invalid(form)
 
         return super().form_valid(form) 
     
@@ -62,8 +72,7 @@ class EnterPhoneNumberView(FormView):
             new_write.save()
         except:
             pass
-        self.request.session['phone_id'] = phone_user.id
-        self.request.session['phone_number'] = str(phone_number)
+        self.request.session['user_id'] = phone_user.id
 
         return super().form_valid(form) 
         
@@ -73,17 +82,18 @@ class EnterAuthCodeView(FormView):
     template_name = 'referral/enter_auth_code.html'
     success_url = reverse_lazy('index')
 
+    def get(self, request, *args, **kwargs):
+        if not self.request.session.get('user_id'):
+            return redirect(reverse_lazy('enter_phone'))
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, form):
-        user_id = self.request.session['phone_id']
+        user_id = self.request.session['user_id']
         auth_code = form.cleaned_data['auth_code']
         user = authenticate(user_id=user_id, auth_code=auth_code)
-        del self.request.session['phone_number']
-        del self.request.session['phone_id']
-
+        del self.request.session['user_id']
         if user is not None:
-                login(self.request, user)
-        else:
-            form.add_error(None, "Invalid code or phone")
+            login(self.request, user)
 
         return super().form_valid(form)
     

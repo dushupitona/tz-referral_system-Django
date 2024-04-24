@@ -11,9 +11,15 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from datetime import datetime, timedelta
 
+import random
+import string
+
+def generate_auth_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
 class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=14, unique=True)
-    referral_code = models.CharField(max_length=6, blank=True)
+    referral_code = models.CharField(max_length=6, default=generate_auth_code)
     inviter = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_superuser = models.BooleanField(default=False)

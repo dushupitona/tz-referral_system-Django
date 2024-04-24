@@ -9,7 +9,16 @@
   <body>
     <form action="{% url 'enter_auth_code' %}" method="post">
       {% csrf_token %}
-      <label for="phone">Auth code:</label>
+      <div class='referral_label'>
+        <label for="phone">Auth code:</label>
+        {% if form.non_field_errors %}
+
+          {% for error in form.non_field_errors %}
+            <div class='error'>{{ error }}</div>
+          {% endfor %}
+
+        {% endif %}
+      </div>
       {{ form.auth_code }}
 
       <button type="submit">Submit</button>

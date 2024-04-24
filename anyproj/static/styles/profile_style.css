@@ -62,3 +62,14 @@ main {
 .stat p {
   margin-bottom: 0;
 }
+
+.referral_label {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: red;
+}
