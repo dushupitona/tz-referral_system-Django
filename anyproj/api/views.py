@@ -1,9 +1,8 @@
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from rest_framework.views import APIView
-
 
 from api.serializers import UsersSerializer, UserLoginSerializer
 from rest_framework import status
@@ -12,12 +11,11 @@ from rest_framework.authtoken.models import Token
 
 from django.shortcuts import get_object_or_404
 
-from django.contrib.auth import authenticate, login
-from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
+from django.contrib.auth import authenticate
+from rest_framework.exceptions import AuthenticationFailed
 
-from rest_framework.permissions import IsAuthenticated 
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authentication import TokenAuthentication
 
 
 def send_code(user):
@@ -26,6 +24,7 @@ def send_code(user):
         new_write.save()
     except:
         pass
+
 
 @api_view(['POST'])
 def send_me_code(request):
@@ -63,10 +62,8 @@ def auth(request):
         return Response(status=500, data={'error': str(e)})
 
 
-
-
 class UserProfileAPIVIew(RetrieveAPIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -82,12 +79,11 @@ class UserProfileAPIVIew(RetrieveAPIView):
     
 
 class EnterInviteAPIVIew(APIView):
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
-        print(user)
         try:
             referral_code = request.data['referral_code']
             invite_code_owner = User.objects.get(referral_code=referral_code)
@@ -106,7 +102,11 @@ class EnterInviteAPIVIew(APIView):
             return Response(status=500, data={'error': str(e)})
 
 
-
+class UserProfilesAPIVIew(ListAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    serializer_class = UsersSerializer
+    queryset = User.objects.all()
 
 
 
