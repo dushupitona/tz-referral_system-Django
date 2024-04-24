@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 
 from referral.models import AuthCodeModel
 
+from django.db.models import Q
+
 
 class AuthCodeBackend(BaseBackend):
     """
@@ -16,9 +18,9 @@ class AuthCodeBackend(BaseBackend):
     ADMIN_PASSWORD = 'pbkdf2_sha256$30000$Vo0VlMnkR4Bk$qEvtdyZRWTcOsCnI/oQ7fVOu1XAURIZYoOZ3iq8Dr4M='
     """
 
-    def authenticate(self, request, username=None, user_id=None, auth_code=None):
+    def authenticate(self, request, user_id=None, phone_number=None, auth_code=None):
         user_model = get_user_model()
-        user = user_model.objects.get(id=user_id)
+        user = user_model.objects.get(Q(id=user_id) | Q(phone_number=phone_number))
         user_auth_code = AuthCodeModel.objects.get(user=user).code
         auth_code_valid = auth_code == user_auth_code
         if user and auth_code_valid:    
