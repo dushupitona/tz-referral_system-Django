@@ -19,6 +19,7 @@ from django.urls import path, include
 
 from referral.views import EnterPhoneNumberView, EnterAuthCodeView, IndexView, logout_view
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='index'),
@@ -26,4 +27,5 @@ urlpatterns = [
     path('auth/', EnterPhoneNumberView.as_view(), name='enter_phone'),
     path('auth/code/', EnterAuthCodeView.as_view(), name='enter_auth_code'),
     path('api/', include('api.urls', namespace='api')),
+
 ]

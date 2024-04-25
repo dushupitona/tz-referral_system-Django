@@ -21,8 +21,10 @@ label {
   margin-bottom: 10px;
 }
 
-input[type="tel"] {
-  width: 100%;
+
+input[type="text"] {
+  width: 300px;
+  height: 30px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;

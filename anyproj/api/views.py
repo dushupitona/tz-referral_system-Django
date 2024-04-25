@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from rest_framework.views import APIView
 
-from api.serializers import UsersSerializer, UserLoginSerializer
+from api.serializers import UserLoginSerializer, UsersSerializer
 from rest_framework import status
 from referral.models import User
 from rest_framework.authtoken.models import Token
@@ -49,7 +49,7 @@ def auth(request):
             user.is_active = True
             user.save()
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'response': 'SUCCES', 'token': str(token)})
+            return Response({'response': 'SUCCESS', 'token': str(token)})
         else:
             raise AuthenticationFailed('Invalid auth_code or phone_number')
     except KeyError as e:
@@ -87,7 +87,7 @@ class EnterInviteAPIVIew(APIView):
                 if invite_code_owner is not user:
                     user.inviter = invite_code_owner
                     user.save()
-                    return Response({'response': 'SUCCES'})
+                    return Response({'response': 'SUCCESS'})
                 else:
                     raise AuthenticationFailed('Invalid referral_code')
             else:

@@ -39,7 +39,6 @@ class AuthCodeModel(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     code = models.CharField(max_length=4, blank=True)
     date_created = models.DateTimeField(editable=True, auto_now_add=True)
-    date_ended = models.DateTimeField(editable=True, default=datetime.now() + timedelta(minutes=5))    
     
     def __str__(self):
         return self.user.phone_number

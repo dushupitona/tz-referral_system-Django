@@ -4,7 +4,7 @@
 <html>
   <head>
     <title>Auth Code</title>
-    <link rel="stylesheet" href="{% static 'styles/login_style.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/auth_style.css' %}">
   </head>
   <body>
     <form action="{% url 'enter_auth_code' %}" method="post">
@@ -19,6 +19,7 @@
 
         {% endif %}
       </div>
+
       {{ form.auth_code }}
 
       <button type="submit">Submit</button>
