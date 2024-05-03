@@ -9,8 +9,6 @@ from django.db.models import Q
 
 
 class AuthCodeBackend(BaseBackend):
-
-
     def authenticate(self, request, user_id=None, phone_number=None, auth_code=None):
         user_model = get_user_model()
         user = user_model.objects.get(Q(id=user_id) | Q(phone_number=phone_number))
