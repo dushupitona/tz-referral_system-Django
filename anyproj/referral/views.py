@@ -29,6 +29,7 @@ class IndexView(LoginRequiredMixin, FormView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['phone_number'] = user.phone_number
+        context['invite_code'] = user.referral_code
         context['inviter'] = user.inviter
         return context
     
